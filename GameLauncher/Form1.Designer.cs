@@ -35,6 +35,7 @@
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.defaultGameSizeLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -58,7 +59,7 @@
             this.pictureBox2.Image = global::GameLauncher.Properties.Resources.spoiler;
             this.pictureBox2.Location = new System.Drawing.Point(2, 101);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(572, 171);
+            this.pictureBox2.Size = new System.Drawing.Size(572, 162);
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
             // 
@@ -81,6 +82,7 @@
             this.pictureBox5.Size = new System.Drawing.Size(93, 91);
             this.pictureBox5.TabIndex = 4;
             this.pictureBox5.TabStop = false;
+            this.pictureBox5.Click += new System.EventHandler(this.pictureBox5_Click);
             // 
             // pictureBox6
             // 
@@ -101,7 +103,7 @@
             this.defaultGameSizeLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.defaultGameSizeLabel.Image = global::GameLauncher.Properties.Resources.longButton;
             this.defaultGameSizeLabel.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.defaultGameSizeLabel.Location = new System.Drawing.Point(267, 294);
+            this.defaultGameSizeLabel.Location = new System.Drawing.Point(267, 276);
             this.defaultGameSizeLabel.Name = "defaultGameSizeLabel";
             this.defaultGameSizeLabel.Size = new System.Drawing.Size(298, 33);
             this.defaultGameSizeLabel.TabIndex = 6;
@@ -116,13 +118,30 @@
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
             this.label1.Image = global::GameLauncher.Properties.Resources.longButton;
             this.label1.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.label1.Location = new System.Drawing.Point(267, 343);
+            this.label1.Location = new System.Drawing.Point(267, 309);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(298, 33);
             this.label1.TabIndex = 7;
-            this.label1.Text = "MEDIUM";
+            this.label1.Text = "MAXIMUM";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.label1.UseCompatibleTextRendering = true;
+            this.label1.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // label2
+            // 
+            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.Font = new System.Drawing.Font("Open Sans", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.label2.Image = global::GameLauncher.Properties.Resources.longButton;
+            this.label2.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.label2.Location = new System.Drawing.Point(267, 343);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(298, 33);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "FULL SCREEN";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.label2.UseCompatibleTextRendering = true;
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // Form1
             // 
@@ -131,6 +150,7 @@
             this.BackgroundImage = global::GameLauncher.Properties.Resources.bg;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(577, 522);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.defaultGameSizeLabel);
             this.Controls.Add(this.pictureBox6);
@@ -162,6 +182,7 @@
         private System.Windows.Forms.PictureBox pictureBox6;
         private System.Windows.Forms.Label defaultGameSizeLabel;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }
 

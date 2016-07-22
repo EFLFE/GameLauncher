@@ -23,20 +23,25 @@ namespace GameLauncher
         private static extern bool ReleaseCapture();
 
         private Rectangle windowSize;
+        private int quality = 2;
+        private bool fullScreen = true;
 
         public Form1()
         {
             InitializeComponent();
             MouseDown += Form1_MouseDown;
 
-            try
+            quality = GameConfig.GetQuality;
+            switch (quality)
             {
-                GameConfig.LoadConfigFile();
+            case 0: label1.Text = "MINIMUM"; break;
+            case 1: label1.Text = "MEDIUM"; break;
+            case 2: label1.Text = "MAXIMUM"; break;
+            default: label1.Text = "?" + GameConfig.GetQuality; break;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка загрузки конфигураций");
-            }
+
+            fullScreen = GameConfig.GetCurrentFullScreen;
+            label2.Text = fullScreen ? "FULL SCREEN" : "WINDOW MODE";
 
             // def desktop size
             windowSize = Screen.AllScreens[0].Bounds;
@@ -53,10 +58,48 @@ namespace GameLauncher
             }
         }
 
-        // close
+        // quality
+        private void label1_Click(object sender, EventArgs e)
+        {
+            if (++quality == 3)
+            {
+                quality = 0;
+                label1.Text = "MINIMUM";
+            }
+            else if (quality == 2)
+            {
+                label1.Text = "MAXIMUM";
+            }
+            else if (quality == 1)
+            {
+                label1.Text = "MEDIUM";
+            }
+            else
+            {
+                label1.Text = "?" + quality;
+            }
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+            fullScreen = !fullScreen;
+            label2.Text = fullScreen ? "FULL SCREEN" : "WINDOW MODE";
+        }
+
+        // START
+        private void pictureBox5_Click(object sender, EventArgs e)
+        {
+            GameConfig.SetQuality(quality, fullScreen);
+            GameConfig.SaveConfigFile();
+        }
+
+        // CLOSE
         private void pictureBox6_Click(object sender, EventArgs e)
         {
+            GameConfig.SetQuality(quality, fullScreen);
+            GameConfig.SaveConfigFile();
             Close();
         }
+
     }
 }

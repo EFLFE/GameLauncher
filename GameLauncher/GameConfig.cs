@@ -15,6 +15,11 @@ namespace GameLauncher
         private static List<string[]> data;
         private static int dataPos;
         private static int i;
+        private static int currentQuality;
+        private static bool currentFullScreen;
+
+        public static int GetQuality => currentQuality;
+        public static bool GetCurrentFullScreen => currentFullScreen;
 
         #region DATA INIT (dataDic)
 
@@ -42,6 +47,8 @@ namespace GameLauncher
         public static void LoadConfigFile()
         {
             searchConfigFile();
+            data = new List<string[]>();
+
             if (iniFile == null)
             {
                 // create default ini file
@@ -49,13 +56,25 @@ namespace GameLauncher
                 {
                     throw new FileNotFoundException("Файл " + DEFAULT_FILE + " не найден.", DEFAULT_FILE);
                 }
-                File.Copy(DEFAULT_FILE, CONFIG_NAME + CONFIG_NAME);
+                File.Copy(DEFAULT_FILE, CONFIG_NAME + CONFIG_EXT);
+                iniFile = CONFIG_NAME + CONFIG_EXT;
             }
-
-            data = new List<string[]>();
 
             using (var file = File.OpenText(iniFile))
             {
+                string[] defq = file.ReadLine().Trim().Split(' ');
+
+                if (defq.Length != 3)
+                {
+                    data.Add(new[] { "#", "2", "F" }); // default quality
+                }
+                else
+                {
+                    data.Add(defq);
+                    currentQuality = Convert.ToInt32(defq[1]);
+                    currentFullScreen = defq[2] == "F";
+                }
+
                 while (!file.EndOfStream)
                 {
                     string t = file.ReadLine().Trim();
@@ -88,31 +107,86 @@ namespace GameLauncher
 
         }
 
-        // найти/перейти на найденую в строке позицию
+        public static void SetQuality(int qv, bool fs)
+        {
+            currentQuality = qv;
+            currentFullScreen = fs;
+
+            foreach (var item in dataDic)
+            {
+                if (item.Key == "fullscreen")
+                {
+                    setDataValue("fullscreen", fs.ToString().ToLower());
+                    continue;
+                }
+                setDataValue(item.Key, item.Value[qv]);
+            }
+
+            data[0][1] = qv.ToString();
+            data[0][2] = fs ? "F" : "W";
+        }
+
+        public static void SaveConfigFile()
+        {
+            if (File.Exists(iniFile))
+            {
+                File.Delete(iniFile);
+                System.Threading.Thread.Sleep(9);
+            }
+
+            using (var stream = File.CreateText(iniFile))
+            {
+                stream.WriteLine($"# {data[0][1]} {data[0][2]}");
+
+                for (i = 1; i < data.Count; i++)
+                {
+                    if (data[i].Length == 1)
+                        stream.WriteLine(data[i][0]);
+                    else
+                        stream.WriteLine($"{data[i][0]}={data[i][1]}");
+                }
+            }
+        }
+
+        // найти/перейти на найденую в строке позицию -> dataPos
         private static bool searchPos(string search, bool andFixPos = false)
         {
             for (i = 0; i < data.Count; i++)
             {
-                if (data[i][0].Contains(search))
+                if (data[i][0] == search)
                 {
                     if (andFixPos)
                         dataPos = i;
                     return true;
                 }
             }
+            System.Diagnostics.Trace.TraceWarning("Search pos '" + search + "' not found.");
             return false;
+        }
+
+        private static void setDataValue(string search, string value, int offset = 0)
+        {
+            for (i = 0; i < data.Count; i++)
+            {
+                if (data[i][0] == search)
+                {
+                    data[i][1 + offset] = value;
+                    return;
+                }
+            }
+            throw new Exception($"Config data '{search}' not found.");
         }
 
         private static void searchConfigFile()
         {
             var iniFiles = Directory.GetFiles(Environment.CurrentDirectory, "*.ini");
 
-            if (iniFiles.Contains(CONFIG_NAME + "-"))
+            if (iniFiles.Any(t => t.Contains(CONFIG_NAME + "-")))
             {
                 // user conf
                 iniFile = iniFiles.First(t => t.Contains(CONFIG_NAME + "-"));
             }
-            else if (iniFiles.Contains(CONFIG_NAME))
+            else if (iniFiles.Any(t => t.Contains(CONFIG_NAME)))
             {
                 iniFile = iniFiles.First(t => t.Contains(CONFIG_NAME));
             }
