@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -91,6 +93,20 @@ namespace GameLauncher
         {
             GameConfig.SetQuality(quality, fullScreen);
             GameConfig.SaveConfigFile();
+
+            if (startGame("game.exe")) Close();
+            MessageBox.Show("Файл game.exe не найден.", "Ошибка");
+        }
+
+        // find and run game exe
+        private static bool startGame(string fileName)
+        {
+            if (File.Exists(fileName))
+            {
+                Process.Start(fileName);
+                return true;
+            }
+            return false;
         }
 
         // CLOSE
