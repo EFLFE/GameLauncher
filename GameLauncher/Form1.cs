@@ -31,6 +31,7 @@ namespace GameLauncher
         public Form1()
         {
             InitializeComponent();
+            Icon = Properties.Resources.icon;
             MouseDown += Form1_MouseDown;
 
             quality = GameConfig.GetQuality;
@@ -116,6 +117,5 @@ namespace GameLauncher
             GameConfig.SaveConfigFile();
             Close();
         }
-
     }
 }
